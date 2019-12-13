@@ -1,0 +1,17 @@
+1 , Dr.Aziz Qaroush ,Machine Learning-Artificial Intelligence-Machine Vision-Language Processing
+2 , Dr.Mohammad Jubran ,Communication-Machine Learning-Artificial Intelligence-Machine Vision
+3 , Dr.Abulsaoud Hanani ,Mobile Application-Signals-Digital Signal Processing
+4 , Dr.Hanna Bullata ,Realtime Systems-Hardware-Artificial Intelligence-Machine Learning-Operating Systems-Robotics
+5 , Dr.Ahmad Afaneh ,Realtime Systems-Embedded Systems-Artificial Intelligence
+6 , Dr.Adnan Yahya ,Image Processing-Information Retrieval-Computer Vision
+7 , Dr.Mohammad Hussein ,Networks-Security
+8 , Dr.Ahmad Alsaadeh ,Security-Mobile Application
+9 , Dr.Khader Mohammad ,Artificial Intelligence-Image Processing
+10 , Dr.Wael Hashlamoun ,Communication-Networks
+11 , Dr.Ashraf Rimawi ,Communication-Networks-Digital Signal Processing
+12 , Dr.Nofal Nofal ,Hardware-Communication
+13 , Dr.Mohammad Aljubeh ,Hardware-Electronics
+14 , Dr.Jaser Saed ,Power Systems-Networks-Mobile Application
+15 , Dr.Abdullatif Abu Issa ,Mobile Application-Hardware
+16 , Dr.Abdelkarim Awwad ,Hardware-Mobile Applications-Networks
+17 , Dr.Wasel Ghanem ,Security-Interface-Mobile Applications

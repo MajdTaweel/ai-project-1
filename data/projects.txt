@@ -1,0 +1,26 @@
+1 , P1 ,Artificial Intelligence-Networks, Dr.Aziz Qaroush , Nour Shaer & Hiba Barakat & Haneen Qurt
+2 , P2 ,Mobile Application-Communication, Dr.Ahmad Alsaadeh , Yousef Anini & Mahmoud Salameh & Laith Mubarak
+3 , P3 ,Mobile Application-Network, Dr.Abdullatif Abu Issa , Maria Ziad & Massa Daraghmah & Mohammad Ahmad
+4 , P4 ,Artificial Intelligence-Machine Learning, Dr.Wasel Ghanem , Fayez Khalil & Suliman Abu Jarour
+5 , P5 ,Mobile Application-Artificial Intelligence, Dr.Abulsaoud Hanani , Sanaa Dabahah & Rahaf Hawamdeh & Ruba Ahmad
+6 , P6 ,Security-Hardware, Dr.Ahmad Alsaadeh , Motasem Modallal & AbdelRahman Awad & Muthaffar Shallakh
+7 , P7 ,Mobile Application-Image Processing, Dr.Ahmad Alsaadeh , Mosab Samarah & Yazan Abbasi & Mahmoud Zeidat
+8 , P8 ,Networks-Hardware, Dr.Mohammad Hussein , Shahd Muhareb & Dima Abu salem & Raghad Bayatnah
+9 , P9 ,Artificial Intelligence-Electronics, DR.Abulsaoud Hanani , Iman Mansour & Rand Sandouqa & Dima Jaber
+10 , P10 ,Mobile Application-Communication, Dr.Abdullatif Abu Issa , Saja Ghoula & Rand Inaim & Sael Khlouf
+11 , P11 ,Machine Learning-Image Processing, Dr.Wasel Ghanem , Alaa Musleh & Tasneem Taleeb & Noor Zahran
+12 , P12 ,Mobile Application-Realtime Systems, Dr.Ashraf Rimawi , Ahmad Daghra & Mahmoud Khoudir & Dania Ghalayeni
+13 , P13 ,Networks-Artificial Intelligence, Dr.Abdulkarim Awwad , Manar Faqeh & Areen Faqeh & Maisaa SalahAldeen
+14 , P14 ,Computer Vision-Artificial Intelligence, Dr.Mohammad Jubran , Maha Hejja & Khokud Sabri & Amneh Ankoush
+15 , P15 ,Security-Digital Signal Processing, Dr.Khader Mohammad , Afnan Hamouda & Ahmad Qutairi & Shireen AbuAwwad
+16 , P16 ,Mobile Application-Hardware, Dr.Abdulsalam Sayad , Iman Nassar & Marah Salameh & Tasneem Ajaj
+17 , P17 ,Computer Vision-Digital Signal Processing, Dr.Aziz Qaroush ,  Ahmad Yahia & Ihab Abdulkareem & Bader Anini
+18 , P18 ,Machine Learning-Electronics, Dr.Adnan Yahia , Hala Salameh & Noor Shamasneh & Maram Balbisi
+19 , P19 ,Mobile Application-Machine Learning, Dr.Ashraf Rimawi , Suhaib Herzallah & Nadeem Abualaraees & Khaled Abuhejla
+20 , P20 ,Mobile Application-Digital Signal Processing, Dr.Hanna Bulata , Laila Alqam & Alaa Farakhnam & Taqwa Saleem
+21 , P21 ,Artificial Intelligence-Machine Learning, Dr.Mohammad Jubran , Mohammad Aburub & Hamed Hijazi & Amer Abdullah
+22 , P22 ,Mobile Application-Interface, Dr.Abdullatif Abu Issa , Shahd Hajjaj & Dima Barghouthi & Shoruq Aljamal
+23 , P23 ,Communication-Networks, Dr.Wael Hashlamoun , Mujahed Odeh & Abdelrahman Murrar
+24 , P24 ,Artificial Intelligence-Machine Learning, Dr.Khader Mohammad , Qasem Zreaq & Abdullah Tabbal
+25 , P25 ,Mobile Application-Electronics, Dr.Adnan Yahya , Anas Ziq & Atallah Hammad & Ali Ozril
+26 , P26 ,Networks-Hardware, Dr.Mohammad Hussein, Duaa Labady & Waed Abu Awwad & Reem Odeh

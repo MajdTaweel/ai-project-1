@@ -1,0 +1,53 @@
+<div class="main-container">
+    <div class="main-wrapper">
+        <div class="jumbotron">
+            <h1 class="display-4">Hello, friend!</h1>
+            <p class="lead">Choose the required configuration and click on <em class="font-weight-bolder">Generate
+                Schedule</em> to start.</p>
+            <hr class="my-4">
+            <p>This program uses a genetic algorithm to optimize graduation projects schedules to produce a
+                conflict-free
+                schedule.</p>
+            <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <form class="justify-content-start" [formGroup]="form">
+                    <div class="form-group">
+                        <label for="iterations">Number of Maximum Iterations</label>
+                        <input type="number" class="form-control" id="iterations" aria-describedby="maxIterations"
+                               formControlName="iterations">
+                        <small id="maxIteration" class="form-text text-muted">The algorithm will stop either if it has
+                            produced a conflict-free schedule or the maximum number of iterations has been
+                            reached.</small>
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" id="prefs" aria-describedby="prefsHelp"
+                               formControlName="prefsConflicts">
+                        <label class="form-check-label" for="prefs">Examiners' Preferences Conflicts</label>
+                        <small id="prefsHelp" class="form-text text-muted">Enabling this will produce conflicts if non
+                            of
+                            the graduation project's topics matches any of the examiner's preferences.</small>
+                    </div>
+                    <div class="form-group form-check">
+                        <input type="checkbox" class="form-check-input" id="range" aria-describedby="rangeHelp"
+                               formControlName="rangeConflicts">
+                        <label class="form-check-label" for="range">Examinations Range Conflicts</label>
+                        <small id="rangeHelp" class="form-text text-muted">Enabling this will produce conflicts if a
+                            faculty
+                            member is an examiner for less than <em class="font-weight-bolder">three</em> or greater
+                            than <em class="font-weight-bolder">six</em> graduation projects.</small>
+                    </div>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-success btn-lg" (click)="generateSchedule()">Generate
+                            Schedule
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!--    <h1 class="title">-->
+        <!--        {{ 'PAGES.HOME.TITLE' | translate }}-->
+        <!--    </h1>-->
+    </div>
+</div>

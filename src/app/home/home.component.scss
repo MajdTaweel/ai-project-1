@@ -1,0 +1,23 @@
+.main-container {
+    overflow-y: visible;
+    height: 100vh;
+    background: url(../../assets/background.jpg) no-repeat center fixed;
+    -webkit-background-size: cover; /* pour anciens Chrome et Safari */
+    background-size: cover; /* version standardisée */
+}
+
+.main-wrapper {
+    overflow-y: scroll;
+    padding-bottom: 24px;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+
+    //.title {
+    //    color: white;
+    //    margin: 0;
+    //    padding: 50px 20px;
+    //}
+}

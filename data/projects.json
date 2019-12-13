@@ -1,0 +1,317 @@
+{
+  "projects": [
+    {
+      "name": "P1",
+      "topics": [
+        "Artificial Intelligence",
+        "Networks"
+      ],
+      "supervisor": "Dr. Aziz Qaroush",
+      "students": [
+        "Nour Shaer",
+        "Hiba Barakat",
+        "Haneen Qurt"
+      ]
+    },
+    {
+      "name": "P2",
+      "topics": [
+        "Mobile Application",
+        "Communication"
+      ],
+      "supervisor": "Dr. Ahmad Alsaadeh",
+      "students": [
+        "Yousef Anini",
+        "Mahmoud Salameh",
+        "Laith Mubarak"
+      ]
+    },
+    {
+      "name": "P3",
+      "topics": [
+        "Mobile Application","Network"
+      ],
+      "supervisor": "Dr. Abdullatif Abu Issa",
+      "students": [
+        "Maria Ziad","Massa Daraghmah","Mohammad Ahmad"
+      ]
+    },
+    {
+      "name": "P4",
+      "topics": [
+        "Artificial Intelligence","Machine Learning"
+      ],
+      "supervisor": "Dr. Wasel Ghanem",
+      "students": [
+        "Fayez Khalil","Suliman Abu Jarour"
+      ]
+    },
+    {
+      "name": "P5",
+      "topics": [
+        "Mobile Application","Artificial Intelligence"
+      ],
+      "supervisor": "Dr. Abulsaoud Hanani",
+      "students": [
+        "Sanaa Dabahah","Rahaf Hawamdeh","Ruba Ahmad"
+      ]
+    },
+    {
+      "name": "P6",
+      "topics": [
+        "Security","Hardware"
+      ],
+      "supervisor": "Dr. Ahmad Alsaadeh",
+      "students": [
+        "Motasem Modallal","AbdelRahman Awad","Muthaffar Shallakh"
+      ]
+    },
+    {
+      "name": "P7",
+      "topics": [
+        "Mobile Application","Image Processing"
+      ],
+      "supervisor": "Dr. Ahmad Alsaadeh",
+      "students": [
+        "Mosab Samarah","Yazan Abbasi","Mahmoud Zeidat"
+      ]
+    },
+    {
+      "name": "P8",
+      "topics": [
+        "Networks","Hardware"
+      ],
+      "supervisor": "Dr. Mohammad Hussein",
+      "students": [
+        "Shahd Muhareb","Dima Abu Salem","Raghad Bayatnah"
+      ]
+    },
+    {
+      "name": "P9",
+      "topics": [
+        "Artificial Intelligence","Electronics"
+      ],
+      "supervisor": "Dr. Abulsaoud Hanani",
+      "students": [
+        "Iman Mansour","Rand Sandouqa","Dima Jaber"
+      ]
+    },
+    {
+      "name": "P10",
+      "topics": [
+        "Mobile Application","Communication"
+      ],
+      "supervisor": "Dr. Abdullatif Abu Issa",
+      "students": [
+        "Saja Ghoula","Rand Inaim","Sael Khlouf"
+      ]
+    },
+    {
+      "name": "P11",
+      "topics": [
+        "Machine Learning","Image Processing"
+      ],
+      "supervisor": "Dr. Wasel Ghanem",
+      "students": [
+        "Alaa Musleh","Tasneem Taleeb","Noor Zahran"
+      ]
+    },
+    {
+      "name": "P12",
+      "topics": [
+        "Mobile Application","Realtime Systems"
+      ],
+      "supervisor": "Dr. Ashraf Rimawi",
+      "students": [
+        "Ahmad Daghra","Mahmoud Khoudir","Dania Ghalayeni"
+      ]
+    },
+    {
+      "name": "P13",
+      "topics": [
+        "Networks","Artificial Intelligence"
+      ],
+      "supervisor": "Dr. Abdulkarim Awwad",
+      "students": [
+        "Manar Faqeh","Areen Faqeh","Maisaa SalahAldeen"
+      ]
+    },
+    {
+      "name": "P14",
+      "topics": [
+
+      ],
+      "supervisor": "",
+      "students": [
+      ]
+    },
+    {
+      "name": "",
+      "topics": [
+      ],
+      "supervisor": "",
+      "students": [
+      ]
+    },
+    {
+      "name": "",
+      "topics": [
+      ],
+      "supervisor": "",
+      "students": [
+      ]
+    },
+    {
+      "name": "",
+      "topics": [
+      ],
+      "supervisor": "",
+      "students": [
+      ]
+    },
+    {
+      "name": "",
+      "topics": [
+      ],
+      "supervisor": "",
+      "students": [
+      ]
+    },
+    {
+      "name": "",
+      "topics": [
+      ],
+      "supervisor": "",
+      "students": [
+      ]
+    },
+    {
+      "name": "",
+      "topics": [
+      ],
+      "supervisor": "",
+      "students": [
+      ]
+    },
+    {
+      "name": "",
+      "topics": [
+      ],
+      "supervisor": "",
+      "students": [
+      ]
+    },
+    {
+      "name": "",
+      "topics": [
+      ],
+      "supervisor": "",
+      "students": [
+      ]
+    },
+    {
+      "name": "",
+      "topics": [
+      ],
+      "supervisor": "",
+      "students": [
+      ]
+    },
+    {
+      "name": "",
+      "topics": [
+      ],
+      "supervisor": "",
+      "students": [
+      ]
+    },
+    {
+      "name": "",
+      "topics": [
+      ],
+      "supervisor": "",
+      "students": [
+      ]
+    },
+    {
+      "name": "",
+      "topics": [
+      ],
+      "supervisor": "",
+      "students": [
+      ]
+    },
+    {
+      "name": "",
+      "topics": [
+      ],
+      "supervisor": "",
+      "students": [
+      ]
+    },
+    {
+      "name": "",
+      "topics": [
+      ],
+      "supervisor": "",
+      "students": [
+      ]
+    },
+    {
+      "name": "",
+      "topics": [
+      ],
+      "supervisor": "",
+      "students": [
+      ]
+    },
+    {
+      "name": "",
+      "topics": [
+      ],
+      "supervisor": "",
+      "students": [
+      ]
+    },
+    {
+      "name": "",
+      "topics": [
+      ],
+      "supervisor": "",
+      "students": [
+      ]
+    },
+    {
+      "name": "",
+      "topics": [
+      ],
+      "supervisor": "",
+      "students": [
+      ]
+    },
+    {
+      "name": "",
+      "topics": [
+      ],
+      "supervisor": "",
+      "students": [
+      ]
+    },
+    {
+      "name": "",
+      "topics": [
+      ],
+      "supervisor": "",
+      "students": [
+      ]
+    },
+    {
+      "name": "",
+      "topics": [
+      ],
+      "supervisor": "",
+      "students": [
+      ]
+    }
+  ]
+}
