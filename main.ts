@@ -1,4 +1,4 @@
-import {app, BrowserWindow} from 'electron';
+import {app, BrowserWindow, screen} from 'electron';
 
 let mainWindow: BrowserWindow;
 
@@ -6,9 +6,12 @@ const args = process.argv.slice(1),
     serve = args.some(val => val === '--serve');
 
 async function createWindow() {
+    const size = screen.getPrimaryDisplay().workAreaSize;
     mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        x: 0,
+        y: 0,
+        width: size.width,
+        height: size.height,
         webPreferences: {
             nodeIntegration: true,
             allowRunningInsecureContent: serve,

@@ -3,10 +3,8 @@
     align-items: center;
 }
 
-.margin-auto {
-    margin: auto;
-}
-
-.padding-16 {
-    padding-bottom: 16px;
+.chart-container {
+    display: block;
+    width: 80vw;
+    height: 75vh;
 }

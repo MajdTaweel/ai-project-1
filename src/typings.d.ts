@@ -14,3 +14,4 @@ interface Window {
 }
 
 declare var eel: any;
+declare var $:any;

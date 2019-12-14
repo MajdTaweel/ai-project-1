@@ -6,6 +6,7 @@ import {CalendarModule, DateAdapter} from "angular-calendar";
 import {adapterFactory} from "angular-calendar/date-adapters/date-fns";
 import {SharedModule} from '../shared/shared.module';
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import {ChartsModule} from "ng2-charts";
 
 const routes: Routes = [
     {
@@ -24,7 +25,8 @@ const routes: Routes = [
             useFactory: adapterFactory
         }),
         SharedModule,
-        FontAwesomeModule
+        FontAwesomeModule,
+        ChartsModule
     ],
     exports: [RouterModule]
 })

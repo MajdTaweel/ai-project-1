@@ -144,16 +144,16 @@ def __select(population, iteration: int, disable_preferences=False, disable_rang
 
     # TODO: Not certain if this is a good choice or not so check it
     # If it is the first iteration the most two fit parent are chosen
-    if iteration == 0:
-        most_fit = fitness_values.index(max(fitness_values))
-        fitness_values.pop(most_fit)
-        second_most_fit = fitness_values.index(max(fitness_values))
-        return most_fit, second_most_fit
+    # if iteration == 0:
+    #     most_fit = fitness_values.index(max(fitness_values))
+    #     fitness_values.pop(most_fit)
+    #     second_most_fit = fitness_values.index(max(fitness_values))
+    #     return most_fit, second_most_fit
 
     selection_pool = []
     fitness_sum = np.sum(fitness_values)
     for index, fitness in enumerate(fitness_values):
-        probability = np.zeros(int(round((fitness / fitness_sum) * 100))).astype(int)
+        probability = np.zeros(int(round((fitness / fitness_sum) * 100)), int)
         probability = np.where(probability == 0, index, index).astype(int)
         selection_pool = np.append(selection_pool, probability).astype(int)
 
@@ -210,6 +210,26 @@ def get_max_min_fitness(population, disable_preferences=False, disable_range=Fal
     min_fitness = min(fitness_values)
 
     return max_fitness, fitness_values.index(max_fitness), min_fitness, fitness_values.index(min_fitness)
+
+
+def get_max_min_avg_fitness(population, disable_preferences=False, disable_range=False):
+    """
+    Returns the maximum value of fitness found in the input population.
+    :param population: The input population for max fitness value calculation.
+    :param disable_preferences: Disable conflicts on examiners' preferences.
+    :param disable_range: Disable conflicts on disallowed number of assigned projects.
+    :return: Max of all fitness values of the input population.
+    """
+    fitness_values = []
+
+    for parent in population:
+        fitness_values += [get_fitness(parent, disable_preferences, disable_range)]
+
+    max_fitness = max(fitness_values)
+    min_fitness = min(fitness_values)
+    avg_fitness = np.mean(fitness_values)
+
+    return max_fitness, fitness_values.index(max_fitness), min_fitness, fitness_values.index(min_fitness), avg_fitness
 
 
 def get_next_gen(population, disable_preferences=False, disable_range=False):

@@ -2,7 +2,7 @@ from typing import List, Union
 import csv
 
 NUM_DAYS = 2
-NUM_SLOTS = 5
+NUM_SLOTS = 7
 
 faculty_members = {}
 projects = {}

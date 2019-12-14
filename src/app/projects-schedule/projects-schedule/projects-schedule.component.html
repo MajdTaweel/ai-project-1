@@ -20,14 +20,53 @@
     dayEndHour="15"
     [excludeDays]="[0, 2, 4, 5, 6]">
 </mwl-calendar-week-view>
-<div *ngIf="!events" class="d-flex flex-column justify-content-center full-height">
-    <div class="margin-auto">
-        <div class="spinner-grow text-warning" role="status">
-            <span class="sr-only">Loading...</span>
+<div *ngIf="!events" class="d-flex flex-column justify-content-around full-height">
+    <div>
+        <div class="chart-container">
+            <canvas baseChart
+                    [datasets]="barChartData"
+                    [labels]="barChartLabels"
+                    [options]="barChartOptions"
+                    [plugins]="barChartPlugins"
+                    [legend]="barChartLegend"
+                    [chartType]="barChartType">
+            </canvas>
         </div>
     </div>
-    <div class="padding-16">
-        <button class="btn btn-danger" routerLink="/">Cancel</button>
+
+    <!--<div class="margin-auto">-->
+    <!--    <div class="spinner-grow text-warning" role="status">-->
+    <!--        <span class="sr-only">Loading...</span>-->
+    <!--    </div>-->
+    <!--</div>-->
+    <div>
+        <button class="btn btn-danger" [routerLink]="eventsTmp ? './' : '/'"
+                (click)="eventsTmp ? events = eventsTmp : canceled = true">
+            {{ eventsTmp ? 'Display Schedule' : 'Cancel' }}
+        </button>
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Schedule Generation Has Finished!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>A schedule with {{ numberOfConflicts }} conflicts has been generated.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Stay Here</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="events = eventsTmp">Display
+                    Schedule
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
