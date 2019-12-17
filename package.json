@@ -101,10 +101,12 @@
         "angular-calendar": "0.28.2",
         "bootstrap": "4.4.1",
         "chart.js": "2.9.3",
+        "chartjs-plugin-colorschemes": "0.4.0",
+        "chartjs-plugin-datalabels": "latest",
+        "chartjs-plugin-zoom": "0.7.5",
         "date-fns": "latest",
         "jquery": "3.4.1",
         "ng2-charts": "2.2.4",
-        "popper.js": "1.16.0",
-        "chartjs-plugin-datalabels": "latest"
+        "popper.js": "1.16.0"
     }
 }
