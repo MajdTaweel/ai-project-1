@@ -3,3 +3,19 @@
     width: 80vw;
     height: 75vh;
 }
+
+#chartdiv {
+    width: 100%;
+    height: 100%;
+}
+
+.hidden {
+    width: 0 !important;
+    height: 0 !important;
+    visibility: hidden !important;
+    * {
+        width: 0 !important;
+        height: 0 !important;
+        visibility: hidden !important;
+    }
+}

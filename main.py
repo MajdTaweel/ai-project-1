@@ -40,11 +40,11 @@ def generate_schedule_json(population, max_index, max_fitness):
 
 
 @eel.expose
-def optimize_schedule(pop_size=20, iterations=2000, disable_preferences=False, disable_range=False):
-    conflicts_disable = [disable_preferences, disable_range]
+def optimize_schedule(pop_size=20, iterations=2000, disable_preferences=False, disable_range=False, disable_consecutive_slots=False):
+    conflicts_disable = [disable_preferences, disable_range, disable_consecutive_slots]
     population = genetic.populate(pop_size)
     max_fitness, max_index, min_fitness, min_index = genetic.get_max_min_fitness(population, conflicts_disable[0],
-                                                                                 conflicts_disable[1])
+                                                                                 conflicts_disable[1], conflicts_disable[2])
     print(f'Iteration: 0\nMax Fitness: {max_fitness}\n************')
 
     for i in range(iterations):
@@ -60,15 +60,15 @@ def optimize_schedule(pop_size=20, iterations=2000, disable_preferences=False, d
         #         conflicts_disable[0] = True
         #         population = genetic.populate(pop_size)
 
-        population = genetic.get_next_gen(population, conflicts_disable[0], conflicts_disable[1])
+        population = genetic.get_next_gen(population, conflicts_disable[0], conflicts_disable[1], conflicts_disable[2])
         new_population = genetic.populate(2)
         for chromosome in new_population:
-            if genetic.get_fitness(chromosome, conflicts_disable[0], conflicts_disable[1]) > min_fitness:
+            if genetic.get_fitness(chromosome, conflicts_disable[0], conflicts_disable[1], conflicts_disable[2]) > min_fitness:
                 population.pop(min_index)
                 population += [chromosome]
 
         max_fitness, max_index, min_fitness, min_index = genetic.get_max_min_fitness(population, conflicts_disable[0],
-                                                                                     conflicts_disable[1])
+                                                                                     conflicts_disable[1], conflicts_disable[2])
         print(f'Iteration: {i + 1}\nMax Fitness: {max_fitness}\n************')
 
     json_string = generate_schedule_json(population, max_index, max_fitness)
@@ -77,7 +77,7 @@ def optimize_schedule(pop_size=20, iterations=2000, disable_preferences=False, d
 
 
 __population = []
-__conflicts_disable = [False, False]
+__conflicts_disable = [False, False, False]
 __iteration = 0
 __fitness = {
     'max': {
@@ -95,13 +95,13 @@ __fitness = {
 
 
 @eel.expose
-def populate(disable_preferences, disable_range, pop_size=20):
+def populate(disable_preferences, disable_range, disable_consecutive_slots, pop_size=20):
     global __population, __fitness, __iteration
     __population.clear()
 
     __population += genetic.populate(pop_size)
     __fitness['max']['value'], __fitness['max']['index'], __fitness['min']['value'], __fitness['min'][
-        'index'], __fitness['avg'] = genetic.get_max_min_avg_fitness(__population, disable_preferences, disable_range)
+        'index'], __fitness['avg'] = genetic.get_max_min_avg_fitness(__population, disable_preferences, disable_range, disable_consecutive_slots)
 
     schedule = json.loads(generate_schedule_json(__population, __fitness['max']['index'], __fitness['max']['value']))
     __fitness['schedule'] = schedule['schedule']
@@ -114,19 +114,20 @@ def populate(disable_preferences, disable_range, pop_size=20):
 
 
 @eel.expose
-def get_next_gen(disable_preferences, disable_range):
+def get_next_gen(disable_preferences, disable_range, disable_consecutive_slots):
     global __population, __fitness, __iteration
-    new_population = genetic.get_next_gen(__population, disable_preferences, disable_range)
+    new_population = genetic.get_next_gen(
+        __population, disable_preferences, disable_range, disable_consecutive_slots)
     __population.clear()
     __population += new_population
     new_population = genetic.populate(2)
     for chromosome in new_population:
-        if genetic.get_fitness(chromosome, disable_preferences, disable_range) > __fitness['min']['value']:
+        if genetic.get_fitness(chromosome, disable_preferences, disable_range, disable_consecutive_slots) > __fitness['min']['value']:
             __population.pop(__fitness['min']['index'])
             __population += [chromosome]
 
     __fitness['max']['value'], __fitness['max']['index'], __fitness['min']['value'], __fitness['min'][
-        'index'], __fitness['avg'] = genetic.get_max_min_avg_fitness(__population, disable_preferences, disable_range)
+        'index'], __fitness['avg'] = genetic.get_max_min_avg_fitness(__population, disable_preferences, disable_range, disable_consecutive_slots)
     print(f'Iteration: {__iteration}\nMax Fitness: {__fitness["max"]["value"]}\n************')
 
     schedule = json.loads(generate_schedule_json(__population, __fitness['max']['index'], __fitness['max']['value']))
@@ -139,4 +140,5 @@ def get_next_gen(disable_preferences, disable_range):
 
 
 eel.init('dist')
-eel.start('index.html', mode='electron')
+# eel.start('index.html', mode='electron')
+eel.start('index.html')

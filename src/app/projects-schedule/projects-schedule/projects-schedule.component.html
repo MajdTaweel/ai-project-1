@@ -12,31 +12,17 @@
 </nav>
 
 <div *ngIf="events" class="text-center">
-    <mwl-calendar-week-view
-        precision="minutes"
-        [viewDate]="viewDate"
-        [events]="events | async"
-        dayStartHour="9"
-        dayEndHour="15"
-        [excludeDays]="[0, 2, 4, 5, 6]">
+    <mwl-calendar-week-view precision="minutes" [viewDate]="viewDate" [events]="events | async" dayStartHour="9"
+        dayEndHour="15" [excludeDays]="[0, 2, 4, 5, 6]">
     </mwl-calendar-week-view>
 
     <div class="pt-5">
         <button class="btn btn-info" (click)="events = null">Display Fitness Chart</button>
     </div>
 </div>
-<div *ngIf="!events" class="d-flex flex-column justify-content-around align-items-center h-100">
-    <div>
-        <div class="chart-container">
-            <canvas baseChart
-                    [datasets]="barChartData"
-                    [labels]="barChartLabels"
-                    [options]="barChartOptions"
-                    [plugins]="barChartPlugins"
-                    [legend]="barChartLegend"
-                    [chartType]="barChartType">
-            </canvas>
-        </div>
+<div class="d-flex flex-column justify-content-around align-items-center h-100 w-100" [class.hidden]='events'>
+    <div class="chart-container">
+        <div id="chartdiv"></div>
     </div>
 
     <!--<div class="margin-auto">-->
@@ -44,25 +30,17 @@
     <!--        <span class="sr-only">Loading...</span>-->
     <!--    </div>-->
     <!--</div>-->
-    <div class="container w-100">
-        <div class="row justify-content-end">
-            <div class="col-4 text-center">
-                <button class="btn" [class.btn-info]="eventsTmp" [class.btn-danger]="!eventsTmp"
-                        [routerLink]="eventsTmp ? './' : '/'"
-                        (click)="eventsTmp ? events = eventsTmp : canceled = true">
-                    {{ eventsTmp ? 'Display Schedule' : 'Cancel' }}
-                </button>
-            </div>
-            <div *ngIf="!events" class="col-4 text-center">
-                <button class="btn btn-warning" (click)="onResetZoom()">Reset Zoom</button>
-            </div>
-        </div>
+    <div class="w-100 text-center">
+        <button class="btn" [class.btn-info]="eventsTmp" [class.btn-danger]="!eventsTmp"
+            [routerLink]="eventsTmp ? './' : '/'" (click)="eventsTmp ? events = eventsTmp : canceled = true">
+            {{ eventsTmp ? 'Display Schedule' : 'Cancel' }}
+        </button>
     </div>
 </div>
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-     aria-hidden="true">
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">

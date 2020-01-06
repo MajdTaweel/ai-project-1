@@ -12,7 +12,8 @@ export class HomeComponent implements OnInit {
     form = new FormGroup({
         iterations: new FormControl(2000),
         prefsConflicts: new FormControl(true),
-        rangeConflicts: new FormControl(true)
+        rangeConflicts: new FormControl(true),
+        consecutiveConflicts: new FormControl(true)
     });
 
     constructor(public scheduleConfigsService: ScheduleConfigsService, private router: Router) {
@@ -25,6 +26,7 @@ export class HomeComponent implements OnInit {
         this.scheduleConfigsService.iterations = this.form.value.iterations;
         this.scheduleConfigsService.prefsConflicts = this.form.value.prefsConflicts;
         this.scheduleConfigsService.rangeConflicts = this.form.value.rangeConflicts;
+        this.scheduleConfigsService.consecutiveConflicts = this.form.value.consecutiveConflicts;
         await this.router.navigate(['projects-schedule'])
     }
 }

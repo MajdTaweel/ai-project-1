@@ -10,6 +10,7 @@ export class ScheduleConfigsService {
     iterations = 2000;
     prefsConflicts = true;
     rangeConflicts = true;
+    consecutiveConflicts = true;
 
     constructor() {
     }

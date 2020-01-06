@@ -55,7 +55,7 @@ def populate(pop_size) -> List[List[Session]]:
     return population
 
 
-def get_fitness(schedule: List[Session], disable_preferences=False, disable_range=False) -> float:
+def get_fitness(schedule: List[Session], disable_preferences=False, disable_range=False, disable_consecutive_slots=False) -> float:
     """
     Returns the fitness of the input chromosome (schedule).
     :param schedule: Input schedule for fitness calculation.
@@ -66,7 +66,8 @@ def get_fitness(schedule: List[Session], disable_preferences=False, disable_rang
     conflicts = 0
 
     examiners = []
-    examiners_schedule = []
+    first_examiner_schedule = []
+    second_examiner_schedule = []
     assigned_rooms = []
 
     for session in schedule:
@@ -97,8 +98,10 @@ def get_fitness(schedule: List[Session], disable_preferences=False, disable_rang
                 conflicts += 1
 
         examiners += [first_examiner, second_examiner]
-        examiners_schedule += [
-            [first_examiner, session.get_day(), session.get_time()],
+        first_examiner_schedule += [
+            [first_examiner, session.get_day(), session.get_time()]
+        ]
+        second_examiner_schedule += [
             [second_examiner, session.get_day(), session.get_time()]
         ]
         assigned_rooms += [
@@ -111,12 +114,45 @@ def get_fitness(schedule: List[Session], disable_preferences=False, disable_rang
             if not 3 <= assigned_projects <= 6:
                 conflicts += 1
 
-    assigned_slots_set = []
-    [assigned_slots_set.append(assigned_slot) for assigned_slot in examiners_schedule if
-     assigned_slot not in assigned_slots_set]
-    for examiner_assigned_slot in assigned_slots_set:
-        no_assigned_slots = examiners_schedule.count(examiner_assigned_slot)
-        conflicts += no_assigned_slots - 1
+    for examiner_schedule in [first_examiner_schedule, second_examiner_schedule]:
+        assigned_slots_set = []
+        [assigned_slots_set.append(assigned_slot) for assigned_slot in examiner_schedule if
+        assigned_slot not in assigned_slots_set]
+        for examiner_assigned_slot in assigned_slots_set:
+            no_assigned_slots = examiner_schedule.count(examiner_assigned_slot)
+            conflicts += no_assigned_slots - 1
+
+            # Soft constraint (preferrebale but not compulsory)
+            # Examiners should not be assigned on three consecutive sessions
+            if not disable_consecutive_slots:
+                consecutive_count = [
+                    [0, 0, 0, 0],
+                    [0, 0, 0, 0]
+                ]
+                if examiner_assigned_slot[2] == 1:
+                    consecutive_count[examiner_assigned_slot[1] - 1][0] += 1
+                elif examiner_assigned_slot[2] == 2:
+                    consecutive_count[examiner_assigned_slot[1] - 1][0] += 1
+                    consecutive_count[examiner_assigned_slot[1] - 1][1] += 1
+                elif examiner_assigned_slot[2] == 3:
+                    consecutive_count[examiner_assigned_slot[1] - 1][0] += 1
+                    consecutive_count[examiner_assigned_slot[1] - 1][1] += 1
+                    consecutive_count[examiner_assigned_slot[1] - 1][2] += 1
+                elif examiner_assigned_slot[2] == 4:
+                    consecutive_count[examiner_assigned_slot[1] - 1][1] += 1
+                    consecutive_count[examiner_assigned_slot[1] - 1][2] += 1
+                    consecutive_count[examiner_assigned_slot[1] - 1][3] += 1
+                elif examiner_assigned_slot[2] == 5:
+                    consecutive_count[examiner_assigned_slot[1] - 1][2] += 1
+                    consecutive_count[examiner_assigned_slot[1] - 1][3] += 1
+                elif examiner_assigned_slot[2] == 6:
+                    consecutive_count[examiner_assigned_slot[1] - 1][3] += 1
+
+        if not disable_consecutive_slots:
+            for day in consecutive_count:
+                for consecutive in day:
+                    if consecutive == 3:
+                        conflicts += 1
 
     assigned_rooms_set = []
     [assigned_rooms_set.append(assigned_room) for assigned_room in assigned_rooms if
@@ -128,7 +164,7 @@ def get_fitness(schedule: List[Session], disable_preferences=False, disable_rang
     return 1 / (1 + conflicts)
 
 
-def __select(population, iteration: int, disable_preferences=False, disable_range=False):
+def __select(population, iteration: int, disable_preferences=False, disable_range=False, disable_consecutive_slots=False):
     """
     Returns two random selections for mating partners.
     :param population: The population from which the parents to mate are chosen.
@@ -140,7 +176,8 @@ def __select(population, iteration: int, disable_preferences=False, disable_rang
     fitness_values = []
 
     for parent in population:
-        fitness_values += [get_fitness(parent, disable_preferences, disable_range)]
+        fitness_values += [get_fitness(parent, disable_preferences,
+                                       disable_range, disable_consecutive_slots)]
 
     # TODO: Not certain if this is a good choice or not so check it
     # If it is the first iteration the most two fit parent are chosen
@@ -173,12 +210,19 @@ def __reproduce(first_parent, second_parent):
     :param second_parent: The second parent for mating.
     :return: A new schedule that has a flavor of both parents' genes.
     """
-    zygote = first_parent + second_parent
-    np.random.shuffle(zygote)
-    offspring = zygote[:len(first_parent)]
-    offspring2 = zygote[len(first_parent):]
+    # zygote = first_parent + second_parent
+    # np.random.shuffle(zygote)
+    # offspring = zygote[:len(first_parent)]
+    # # offspring2 = zygote[len(first_parent):]
 
-    return offspring, offspring2
+    # For a random cut
+    # ****************************************************
+    random_split = np.random.randint(0, len(first_parent))
+    offspring = first_parent[:random_split] + second_parent[random_split:]
+    # ****************************************************
+
+    return offspring
+    # return offspring, offspring2
 
 
 def __mutate(chromosome):
@@ -193,7 +237,7 @@ def __mutate(chromosome):
     chromosome[selection] = mutated_gene
 
 
-def get_max_min_fitness(population, disable_preferences=False, disable_range=False):
+def get_max_min_fitness(population, disable_preferences=False, disable_range=False, disable_consecutive_slots=False):
     """
     Returns the maximum value of fitness found in the input population.
     :param population: The input population for max fitness value calculation.
@@ -204,7 +248,8 @@ def get_max_min_fitness(population, disable_preferences=False, disable_range=Fal
     fitness_values = []
 
     for parent in population:
-        fitness_values += [get_fitness(parent, disable_preferences, disable_range)]
+        fitness_values += [get_fitness(parent, disable_preferences,
+                                       disable_range, disable_consecutive_slots)]
 
     max_fitness = max(fitness_values)
     min_fitness = min(fitness_values)
@@ -212,7 +257,7 @@ def get_max_min_fitness(population, disable_preferences=False, disable_range=Fal
     return max_fitness, fitness_values.index(max_fitness), min_fitness, fitness_values.index(min_fitness)
 
 
-def get_max_min_avg_fitness(population, disable_preferences=False, disable_range=False):
+def get_max_min_avg_fitness(population, disable_preferences=False, disable_range=False, disable_consecutive_slots=False):
     """
     Returns the maximum value of fitness found in the input population.
     :param population: The input population for max fitness value calculation.
@@ -223,7 +268,8 @@ def get_max_min_avg_fitness(population, disable_preferences=False, disable_range
     fitness_values = []
 
     for parent in population:
-        fitness_values += [get_fitness(parent, disable_preferences, disable_range)]
+        fitness_values += [get_fitness(parent, disable_preferences,
+                                       disable_range, disable_consecutive_slots)]
 
     max_fitness = max(fitness_values)
     min_fitness = min(fitness_values)
@@ -232,7 +278,7 @@ def get_max_min_avg_fitness(population, disable_preferences=False, disable_range
     return max_fitness, fitness_values.index(max_fitness), min_fitness, fitness_values.index(min_fitness), avg_fitness
 
 
-def get_next_gen(population, disable_preferences=False, disable_range=False):
+def get_next_gen(population, disable_preferences=False, disable_range=False, disable_consecutive_slots=False):
     """
     Returns the next-gen of the population.
     :param population: The previous-gen (current) population.
@@ -241,12 +287,17 @@ def get_next_gen(population, disable_preferences=False, disable_range=False):
     :return: List of schedules of new randomly generated Session objects.
     """
     new_population = []
-    for i in range(len(population) // 2):
-        first_selection, second_selection = __select(population, i, disable_preferences, disable_range)
+    for i in range(len(population)):
+    # for i in range(len(population) // 2):
+        first_selection, second_selection = __select(
+            population, i, disable_preferences, disable_range, disable_consecutive_slots)
 
-        offspring, offspring2 = __reproduce(population[first_selection], population[second_selection])
+        offspring = __reproduce(
+            population[first_selection], population[second_selection])
+        # offspring, offspring2 = __reproduce(population[first_selection], population[second_selection])
 
-        new_population += [offspring, offspring2]
+        new_population += [offspring]
+        # new_population += [offspring, offspring2]
 
     length = len(new_population[0])
     for child in new_population:

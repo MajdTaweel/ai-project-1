@@ -1,18 +1,23 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
+import { AfterViewInit, Component, NgZone, OnInit, OnDestroy } from '@angular/core';
+import { Router } from "@angular/router";
 
-import {Observable, of} from "rxjs";
+import { Observable, of } from "rxjs";
 
-import {ScheduleConfigsService} from "../../schedule-configs.service";
+import { ScheduleConfigsService } from "../../schedule-configs.service";
 
-import {CalendarEvent} from 'angular-calendar';
-import {setHours, setMinutes, setDay, setMonth, setYear} from 'date-fns';
+import { CalendarEvent } from 'angular-calendar';
 
-import {faAngleLeft} from '@fortawesome/free-solid-svg-icons';
+import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
+import * as am4core from "@amcharts/amcharts4/core";
+import * as am4charts from '@amcharts/amcharts4/charts';
+import am4themes_animated from '@amcharts/amcharts4/themes/animated';
+import am4themes_kelly from '@amcharts/amcharts4/themes/kelly';
 
-import {ChartOptions, ChartType, ChartDataSets} from 'chart.js';
-import {Label} from 'ng2-charts';
-import 'chartjs-plugin-zoom';
+// Apply chart themes
+am4core.useTheme(am4themes_animated);
+am4core.useTheme(am4themes_kelly);
+
+
 
 
 interface Session {
@@ -32,130 +37,19 @@ interface Session {
     templateUrl: './projects-schedule.component.html',
     styleUrls: ['./projects-schedule.component.scss']
 })
-export class ProjectsScheduleComponent implements OnInit, AfterViewInit {
+export class ProjectsScheduleComponent implements OnInit, AfterViewInit, OnDestroy {
 
     angleLeft = faAngleLeft;
-    viewDate: Date = new Date();
+    viewDate: Date = new Date(2019, 12, 20);
     schedule: Session[];
     numberOfConflicts: number;
 
     events: Observable<CalendarEvent[]> = null;
     eventsTmp: Observable<CalendarEvent[]> = null;
     canceled = false;
-    chart;
+    chart: am4charts.XYChart3D;
 
-    public barChartOptions: ChartOptions = {
-        responsive: true,
-        title: {
-            display: true,
-            text: 'Fitness Chart'
-        },
-        scales: {xAxes: [{}], yAxes: [{}]},
-        plugins: {
-            zoom: {
-                // Container for pan options
-                pan: {
-                    // Boolean to enable panning
-                    enabled: true,
-
-                    drag: true,
-
-                    // Panning directions. Remove the appropriate direction to disable
-                    // Eg. 'y' would only allow panning in the y direction
-                    // A function that is called as the user is panning and returns the
-                    // available directions can also be used:
-                    //   mode: function({ chart }) {
-                    //     return 'xy';
-                    //   },
-                    mode: 'x',
-
-                    rangeMin: {
-                        // Format of min pan range depends on scale type
-                        x: null,
-                        y: null
-                    },
-                    rangeMax: {
-                        // Format of max pan range depends on scale type
-                        x: null,
-                        y: null
-                    },
-
-                    // Function called while the user is panning
-                    onPan: ({chart}) => {
-                        console.log(`I'm panning!!!`);
-                        this.chart = chart;
-                    },
-                    // Function called once panning is completed
-                    onPanComplete: function ({chart}) {
-                        console.log(`I was panned!!!`);
-                    }
-                },
-
-                // Container for zoom options
-                zoom: {
-                    // Boolean to enable zooming
-                    enabled: true,
-
-                    // Enable drag-to-zoom behavior
-                    drag: false,
-
-                    // Drag-to-zoom effect can be customized
-                    // drag: {
-                    // 	 borderColor: 'rgba(225,225,225,0.3)'
-                    // 	 borderWidth: 5,
-                    // 	 backgroundColor: 'rgb(225,225,225)',
-                    // 	 animationDuration: 0
-                    // },
-
-                    // Zooming directions. Remove the appropriate direction to disable
-                    // Eg. 'y' would only allow zooming in the y direction
-                    // A function that is called as the user is zooming and returns the
-                    // available directions can also be used:
-                    //   mode: function({ chart }) {
-                    //     return 'xy';
-                    //   },
-                    mode: 'x',
-
-                    rangeMin: {
-                        // Format of min zoom range depends on scale type
-                        x: null,
-                        y: null
-                    },
-                    rangeMax: {
-                        // Format of max zoom range depends on scale type
-                        x: null,
-                        y: null
-                    },
-
-                    // Speed of zoom via mouse wheel
-                    // (percentage of zoom on a wheel event)
-                    speed: 5.0,
-
-                    // Function called while the user is zooming
-                    onZoom: ({chart}) => {
-                        console.log(`I'm zooming!!!`);
-                        this.chart = chart;
-                    },
-                    // Function called once zooming is completed
-                    onZoomComplete: function ({chart}) {
-                        console.log(`I was zoomed!!!`);
-                    }
-                }
-            }
-        }
-    };
-    public barChartLabels: Label[] = [];
-    public barChartType: ChartType = 'bar';
-    public barChartLegend = true;
-    public barChartPlugins = [];
-
-    public barChartData: ChartDataSets[] = [
-        {data: [], label: 'Min Fitness'},
-        {data: [], label: 'Avg Fitness'},
-        {data: [], label: 'Max Fitness'}
-    ];
-
-    constructor(private scheduleConfigsService: ScheduleConfigsService, public router: Router) {
+    constructor(private zone: NgZone, private scheduleConfigsService: ScheduleConfigsService, public router: Router) {
     }
 
     ngOnInit() {
@@ -177,15 +71,66 @@ export class ProjectsScheduleComponent implements OnInit, AfterViewInit {
                 numberOfConflicts: number
             } = JSON.parse(await eel.populate(
                 !this.scheduleConfigsService.prefsConflicts,
-                !this.scheduleConfigsService.rangeConflicts
+                !this.scheduleConfigsService.rangeConflicts,
+                !this.scheduleConfigsService.consecutiveConflicts
             )());
 
             let maxFitness = fitness.max.value;
 
-            this.barChartLabels.push('Gen 1');
-            this.barChartData[0].data.push(fitness.min.value);
-            this.barChartData[1].data.push(fitness.avg);
-            this.barChartData[2].data.push(fitness.max.value);
+            this.zone.runOutsideAngular(() => {
+                let chart = am4core.create('chartdiv', am4charts.XYChart3D);
+                chart.colors
+                chart.data = [
+                    {
+                        gen: 'Gen 1',
+                        minFitness: fitness.min.value,
+                        avgFitness: fitness.avg,
+                        maxFitness: fitness.max.value
+                    }
+                ];
+                // Create axes
+                const categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+                categoryAxis.dataFields.category = "gen";
+                categoryAxis.title.text = "Generation";
+
+                const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+                valueAxis.title.text = "Fitness";
+
+                // Create series
+                const series = chart.series.push(new am4charts.ColumnSeries3D());
+                series.dataFields.valueY = "minFitness";
+                series.dataFields.categoryX = "gen";
+                series.name = "Min Fitness";
+                series.tooltipText = "{name}: [bold]{valueY}[/]";
+
+                const series2 = chart.series.push(new am4charts.ColumnSeries3D());
+                series2.dataFields.valueY = "avgFitness";
+                series2.dataFields.categoryX = "gen";
+                series2.name = "Avg Fitness";
+                series2.tooltipText = "{name}: [bold]{valueY}[/]";
+
+                const series3 = chart.series.push(new am4charts.ColumnSeries3D());
+                series3.dataFields.valueY = "maxFitness";
+                series3.dataFields.categoryX = "gen";
+                series3.name = "Max Fitness";
+                series3.tooltipText = "{name}: [bold]{valueY}[/]";
+
+                // Add legend
+                chart.legend = new am4charts.Legend();
+
+                // Add cursor
+                chart.cursor = new am4charts.XYCursor();
+
+                // Add simple vertical scrollbar
+                chart.scrollbarY = new am4core.Scrollbar();
+
+                // Add horizotal scrollbar with preview
+                var scrollbarX = new am4charts.XYChartScrollbar();
+                scrollbarX.series.push(series);
+                chart.scrollbarX = scrollbarX;
+
+                this.chart = chart;
+            });
 
             console.log(this.scheduleConfigsService.iterations);
             for (let i = 0; i < this.scheduleConfigsService.iterations; i++) {
@@ -198,7 +143,8 @@ export class ProjectsScheduleComponent implements OnInit, AfterViewInit {
 
                 if (this.scheduleConfigsService.iterations >= 1000) {
                     if (i === Math.trunc(this.scheduleConfigsService.iterations * 0.4)) {
-                        this.scheduleConfigsService.rangeConflicts = false;
+                        this.scheduleConfigsService.prefsConflicts = false;
+                        this.scheduleConfigsService.consecutiveConflicts = false;
                         // fitness = JSON.parse(await eel.populate(
                         //     !this.scheduleConfigsService.prefsConflicts,
                         //     !this.scheduleConfigsService.rangeConflicts
@@ -206,7 +152,7 @@ export class ProjectsScheduleComponent implements OnInit, AfterViewInit {
                     }
 
                     if (i === Math.trunc(this.scheduleConfigsService.iterations * 0.75)) {
-                        this.scheduleConfigsService.prefsConflicts = false;
+                        this.scheduleConfigsService.rangeConflicts = false;
                         // fitness = JSON.parse(await eel.populate(
                         //     !this.scheduleConfigsService.prefsConflicts,
                         //     !this.scheduleConfigsService.rangeConflicts
@@ -216,13 +162,18 @@ export class ProjectsScheduleComponent implements OnInit, AfterViewInit {
 
                 fitness = JSON.parse(await eel.get_next_gen(
                     !this.scheduleConfigsService.prefsConflicts,
-                    !this.scheduleConfigsService.rangeConflicts
+                    !this.scheduleConfigsService.rangeConflicts,
+                    !this.scheduleConfigsService.consecutiveConflicts
                 )());
 
-                this.barChartLabels.push(`Gen ${i + 2}`);
-                this.barChartData[0].data.push(fitness.min.value);
-                this.barChartData[1].data.push(fitness.avg);
-                this.barChartData[2].data.push(fitness.max.value);
+                this.chart.addData(
+                    {
+                        gen: `Gen ${i + 2}`,
+                        minFitness: fitness.min.value,
+                        avgFitness: fitness.avg,
+                        maxFitness: fitness.max.value
+                    }
+                );
 
                 // const len = this.barChartLabels.length;
                 // if (len > 10) {
@@ -250,12 +201,24 @@ export class ProjectsScheduleComponent implements OnInit, AfterViewInit {
             console.log(this.schedule);
             const events = [];
             for (let session of this.schedule) {
-                const hours = [9, 10, 11, 12, 1, 2];
+                const hours = [9, 10, 11, 12, 13, 14];
                 const minutes = [0, 50];
+                let students = '';
+                let first = true;
+                session.project.students.forEach(student => {
+                    if (first) {
+                        students += student;
+                        first = false;
+                    } else {
+                        students += `, ${student}`;
+                    }
+                });
                 events.push({
-                    start: setYear(setMonth(setDay(setHours(setMinutes(new Date(), minutes[0]), hours[session.time - 1]), (2 * session.day - 1)), 11), 2019),
-                    end: setYear(setMonth(setDay(setHours(setMinutes(new Date(), minutes[1]), hours[session.time - 1]), (2 * session.day - 1)), 11), 2019),
-                    title: `${session.project.name} Room: ${session.room}`,
+                    start: new Date(2019, 12, 18 + 2 * session.day, hours[session.time - 1], minutes[0]),
+                    // setYear(setMonth(setDay(setHours(setMinutes(new Date(), minutes[0]), hours[session.time - 1]), (2 * session.day - 1)), 10), 2019),
+                    end: new Date(2019, 12, 18 + 2 * session.day, hours[session.time - 1], minutes[1]),
+                    // setYear(setMonth(setDay(setHours(setMinutes(new Date(), minutes[1]), hours[session.time - 1]), (2 * session.day - 1)), 10), 2019),
+                    title: `${session.project.name} - Supervisor: ${session.project.supervisor} - Students: ${students} - Room: ${session.room} - Examiners: ${session.examiners[0]}, ${session.examiners[1]}`,
                     allDay: false,
                 })
             }
@@ -268,9 +231,11 @@ export class ProjectsScheduleComponent implements OnInit, AfterViewInit {
         }
     }
 
-    onResetZoom() {
-        if (this.chart) {
-            this.chart.resetZoom();
-        }
+    ngOnDestroy() {
+        this.zone.runOutsideAngular(() => {
+            if (this.chart) {
+                this.chart.dispose();
+            }
+        });
     }
 }
